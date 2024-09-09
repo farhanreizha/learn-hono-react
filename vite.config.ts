@@ -27,6 +27,7 @@ export default defineConfig({
       },
     },
   },
+
   /**
    * Configures the Vite resolver to use an alias for the `@` symbol, pointing it to the `src` directory of the project.
    * This allows importing files from the `src` directory using the `@` prefix, instead of having to use relative paths.
