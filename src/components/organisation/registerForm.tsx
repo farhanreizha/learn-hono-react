@@ -6,6 +6,7 @@ import { formRegister, FormRegister } from "@/schema/auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { successToastConfig, errorToastConfig } from "@/config/toastConfig";
 
 export default function RegisterForm() {
   const { mutate } = useRegister();
@@ -21,20 +22,16 @@ export default function RegisterForm() {
 
   const onRegisterSubmit = (value: FormRegister) => {
     mutate(value, {
-      onSuccess: (value: { message: string }) => {
-        toast.success(value.message, {
-          position: "top-right",
-          className: "group toast group-[.toaster]:bg-green-500 group-[.toaster]:text-white group-[.toaster]:border-none group-[.toaster]:shadow-lg",
-        });
+      onSuccess: (data: { message: string }) => {
+        toast.success(data.message, successToastConfig);
+        window.location.replace("/");
       },
       onError: (error: Error) => {
         const errorMessage = error.message.split('"')[1].trim();
-        toast.error(errorMessage, {
-          position: "top-right",
-          className: "group toast group-[.toaster]:bg-red-500 group-[.toaster]:text-white group-[.toaster]:border-none group-[.toaster]:shadow-lg",
-        });
+        toast.error(errorMessage, errorToastConfig);
       },
     });
+    registerForm.reset();
   };
 
   return (
@@ -73,7 +70,7 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Create a password" {...field} />
+                <Input type="password" placeholder="Enter your password" {...field} autoComplete="off" />
               </FormControl>
               <FormMessage />
             </FormItem>

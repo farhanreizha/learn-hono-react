@@ -9,7 +9,7 @@ export const formRegister = z.object({
 export type FormRegister = z.infer<typeof formRegister>;
 
 export const formLogin = z.object({
-  email: z.string().email(),
+  emailOrUsername: z.string(),
   password: z.string().min(8),
 });
 

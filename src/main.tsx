@@ -6,7 +6,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "@hono/auth-js/react";
+import { AuthProvider } from "./context/authContext";
 
 const queryClient = new QueryClient();
 
@@ -27,9 +27,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider>
+        <AuthProvider>
           <RouterProvider router={router} />
-        </SessionProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

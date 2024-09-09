@@ -1,0 +1,57 @@
+services:
+  app:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    restart: always
+    command: ["sh", "-c", "bun prisma generate && bun prisma db push && bun prisma db seed && bun dev"]
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - path: ./package.json
+          action: rebuild
+        - path: ./vite.config.ts
+          action: rebuild
+        - path: bun.lockb
+          action: rebuild
+        - path: .
+          target: /app
+          action: sync
+
+  db:
+    image: mariadb:10.6.4-focal
+    restart: always
+    environment:
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_TCP_PORT: 3306
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    command: "--default-authentication-plugin=mysql_native_password --wait_timeout=28800 --interactive_timeout=28800"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=mypassword || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+volumes:
+  db:

@@ -3,9 +3,9 @@ import { Outlet } from "@tanstack/react-router";
 
 export default function MainLayout() {
   return (
-    <div>
+    <main className="flex flex-col min-h-screen max-w-7xl mx-auto">
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
-    </div>
+    </main>
   );
 }

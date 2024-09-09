@@ -7,8 +7,8 @@ export const example = new Hono()
       message: "Hello this is api",
     })
   )
-  .get("/test", (c) =>
-    c.json(
+  .get("/test", (c) => {
+    return c.json(
       {
         ok: true,
         message: "Successfully get data",
@@ -18,5 +18,19 @@ export const example = new Hono()
         },
       },
       200
-    )
-  );
+    );
+  })
+  .get("/auth/test", async (c) => {
+    const auth = c.get("jwtPayload");
+    return c.json(
+      {
+        ok: true,
+        message: "Successfully get data",
+        data: {
+          title: `Title Hello ${auth.email}`,
+          desc: `Description Hello ${auth.username}`,
+        },
+      },
+      200
+    );
+  });

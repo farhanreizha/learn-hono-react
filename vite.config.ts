@@ -20,6 +20,7 @@ export default defineConfig({
    * The `changeOrigin` option is set to `true` to ensure the correct origin is used when forwarding the requests.
    */
   server: {
+    host: "0.0.0.0",
     proxy: {
       "/api": {
         target: "http://localhost:3000",
